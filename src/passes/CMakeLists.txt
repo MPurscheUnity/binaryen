@@ -80,6 +80,7 @@ set(passes_SOURCES
   PrintCallGraph.cpp
   PrintFeatures.cpp
   PrintFunctionMap.cpp
+  RemoveFunctions.cpp
   RoundTrip.cpp
   SetGlobals.cpp
   StackIR.cpp
@@ -89,6 +90,7 @@ set(passes_SOURCES
   Strip.cpp
   StripTargetFeatures.cpp
   RedundantSetElimination.cpp
+  RemoveUncalledFunctions.cpp
   RemoveImports.cpp
   RemoveMemory.cpp
   RemoveNonJSOps.cpp
