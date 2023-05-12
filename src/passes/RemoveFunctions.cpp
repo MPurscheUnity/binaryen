@@ -28,9 +28,9 @@
 
 namespace wasm {
 
-static std::vector<Name> parseFunctionList(const cashew::IString &functionList, Module *module) {
+static std::vector<Name> parseFunctionList(const IString &functionList, Module *module) {
    std::vector<Name> functions;
-   std::string input = functionList.c_str();
+   std::string input = functionList.toString().c_str();
 
    // If --remove-functions=* is passed, remove everything possible. (track this as an empty function list)
    if (functionList == "*") {
@@ -38,7 +38,7 @@ static std::vector<Name> parseFunctionList(const cashew::IString &functionList, 
    }
 
    // Read function list from a file if prefixed with '@'
-   if (functionList.startsWith("@")) {
+   if (functionList.startsWith(IString("@"))) {
       input = read_file<std::string>(input.substr(1), Flags::Text);
    }
 
@@ -68,7 +68,7 @@ static std::vector<Name> parseFunctionList(const cashew::IString &functionList, 
       }
    }
    if (functions.empty()) {
-      Fatal() << "Unable to parse argument --remove-functions=" << functionList.c_str();
+      Fatal() << "Unable to parse argument --remove-functions=" << functionList;
    }
    return functions;
 }
@@ -105,12 +105,12 @@ static void remove(PassRunner* runner, Module* module, std::vector<Name> functio
 }
 
 struct RemoveFunctions : public Pass {
-  void run(PassRunner* runner, Module* module) override {
-    Name name = runner->options.getArgument(
+  void run(Module* module) override {
+    Name name = getPassRunner()->options.getArgument(
       "remove-functions",
       "RemoveFunctions usage:  wasm-opt --remove-functions=FUNCTION_NAME"); // todo: multiple functions via --remove-functions=name1;name2;index3;... or --remove-functions=@filename.txt
     std::vector<Name> functionsToRemove = parseFunctionList(name, module);
-    remove(runner, module, functionsToRemove);
+    remove(getPassRunner(), module, functionsToRemove);
   }
 };
 

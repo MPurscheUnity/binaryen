@@ -78,14 +78,14 @@ struct RemoveUncalledFunctions
      }
   }
 
-  void run(PassRunner* runner, Module* module) override {
-     Name name = runner->options.getArgument(
+  void run(Module* module) override {
+     Name name = getPassRunner()->options.getArgument(
        "remove-uncalled-functions",
        "RemoveUncalledFunctions usage:  wasm-opt --remove-uncalled-functions=COVERAGE.DAT");
 
      std::ifstream infile;
      std::ios_base::openmode flags = std::ifstream::in | std::ifstream::binary;
-     infile.open(name.c_str(), flags);
+     infile.open(name.toString().c_str(), flags);
      if (!infile.is_open()) {
         std::cerr << "Failed opening '" << name << "'" << std::endl;
         exit(EXIT_FAILURE);
@@ -138,7 +138,7 @@ struct RemoveUncalledFunctions
 
      WalkerPass<
         PostWalker<RemoveUncalledFunctions,
-        UnifiedExpressionVisitor<RemoveUncalledFunctions>>>::run(runner, module);
+        UnifiedExpressionVisitor<RemoveUncalledFunctions>>>::run(getPassRunner(), module);
 
      delete builder;
 
@@ -146,7 +146,7 @@ struct RemoveUncalledFunctions
      std::cerr << "Removed " << numBlocksRemoved << "/" << numBlocksRemoved + numBlocksPreserved << " (" << numBlocksRemoved * 100.0 / (numBlocksRemoved + numBlocksPreserved) << "%) of blocks as unreachable.\n";
 
      // Remove unneeded things.
-     PassRunner postRunner(runner);
+     PassRunner postRunner(getPassRunner());
      postRunner.add("inlining-optimizing");
      postRunner.add("dce");
      postRunner.add("remove-unused-module-elements");
