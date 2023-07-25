@@ -140,16 +140,13 @@ static void remove(PassRunner* runner,
 
 struct RemoveFunctions : public Pass {
   void run(Module* module) override {
-    Name
-      name =
-        getPassRunner()
-          ->options.getArgument(
-            "remove-functions",
-            "RemoveFunctions usage:  wasm-opt "
-            "--remove-functions=FUNCTION_NAME"); // todo: multiple functions via
-                                                 // --remove-functions=name1;name2;index3;...
-                                                 // or
-                                                 // --remove-functions=@filename.txt
+    Name name = getPassRunner()->options.getArgument(
+      "remove-functions",
+      "RemoveFunctions usage:  wasm-opt "
+      "--remove-functions=FUNCTION_NAME"); // todo: multiple functions via
+                                           // --remove-functions=name1;name2;index3;...
+                                           // or
+                                           // --remove-functions=@filename.txt
     std::vector<Name> functionsToRemove = parseFunctionList(name, module);
     remove(getPassRunner(), module, functionsToRemove);
   }
