@@ -41,7 +41,7 @@ struct RemoveUncalledFunctions
    UnifiedExpressionVisitor<RemoveUncalledFunctions>>> {
 
   Expression *stripLogExecutionCall(Function* func, Block* block, Call* call) {
-     int idx = call->operands[0]->dynCast<Const>()->value.geti32();
+     size_t idx = call->operands[0]->dynCast<Const>()->value.geti32();
 
      if (idx >= blocksToRemove.size() << 3 || !(blocksToRemove[idx >> 3] & (1 << (idx & 7)))) {
         const Type returns = block->type;

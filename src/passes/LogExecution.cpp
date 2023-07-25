@@ -103,7 +103,7 @@ struct LogExecution : public WalkerPass<PostWalker<LogExecution>> {
 
      // Reserve all function indices up front for the function names. This is
      // so that the logged ordinal numbers will match up with the function ordinals.
-     int idx = 0;
+     Index idx = 0;
      for (auto& func : curr->functions) {
         if (func->imported()) ++idx;
      }
