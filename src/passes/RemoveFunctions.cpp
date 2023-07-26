@@ -50,11 +50,13 @@ static std::vector<Name> parseFunctionList(const IString& functionList,
     if (input[end] == ';' || input[end] == '\n' || end == input.length()) {
       // Trim \r and whitespace
       size_t trimEnd = end;
-      while (trimEnd > 0 && input[trimEnd - 1] <= 32)
+      while (trimEnd > 0 && input[trimEnd - 1] <= 32) {
         --trimEnd;
+      }
       size_t trimBegin = begin;
-      while (trimBegin < input.length() && input[trimBegin] <= 32)
+      while (trimBegin < input.length() && input[trimBegin] <= 32) {
         ++trimBegin;
+      }
       if (trimBegin < trimEnd) {
         std::string name = input.substr(trimBegin, trimEnd - trimBegin);
         if (std::isdigit(name[0])) {

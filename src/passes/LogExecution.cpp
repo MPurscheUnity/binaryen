@@ -47,9 +47,11 @@ struct LogExecution : public WalkerPass<PostWalker<LogExecution>> {
   // Tries to convert a string to a function index. Returns (Index)-1 on
   // failure.
   Index stringToIndex(const char* s) {
-    for (const char* q = s; *q; ++q)
-      if (!isdigit(*q))
+    for (const char* q = s; *q; ++q) {
+      if (!isdigit(*q)) {
         return (Index)-1;
+      }
+    }
     return std::stoi(s);
   }
 
@@ -112,23 +114,27 @@ struct LogExecution : public WalkerPass<PostWalker<LogExecution>> {
     // ordinals.
     Index idx = 0;
     for (auto& func : curr->functions) {
-      if (func->imported())
+      if (func->imported()) {
         ++idx;
+      }
     }
 
     for (auto& func : curr->functions) {
-      if (func->imported())
+      if (func->imported()) {
         continue;
+      }
 
       Index currentFunctionIndex =
         (Index)stringToIndex(func->name.toString().c_str());
       if (currentFunctionIndex != (Index)-1) {
-        if (currentFunctionIndex != idx)
+        if (currentFunctionIndex != idx) {
           std::cerr
             << "Functions are not in ordinal order! currentFunctionIndex="
             << currentFunctionIndex << ", vs idx=" << idx << std::endl;
-      } else
+        }
+      } else {
         currentFunctionIndex = idx;
+      }
       functionOrdinals[func.get()] = idx;
       std::cerr << "Function " << func->name << " has ordinal " << idx
                 << std::endl;
